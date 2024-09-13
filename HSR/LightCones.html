@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" href="../css/button.css">
+  <link rel="stylesheet" href="../css/dropdown.css">
+  <link rel="stylesheet" href="../css/topnav.css">
+  
+  <title>Hoyoptimizer</title>
+  <body onload="SelectNLC('ASecretVow')">
+    <div class="topnav" id="Menu">
+      <a href="../hoyoptimizer.html">Hoyoptimizer</a>
+	  <a class="inactive">Honkai Impact 3rd</a>
+      <a class="inactive">Genshin Impact</a>
+      <a class="active">Honkai: Star Rail</a>
+      <a class="inactive">Zenless Zone Zero</a>
+    </div>
+	<div style="background-color:#FF860D;height:5px"></div>
+    <div class="topnav">
+	  <a href="HSR.html">Honkai: Star Rail</a>
+      <a class="inactive">Characters</a>
+	  <a class="active">Light Cones</a>
+      <a class="inactive">Relics</a>
+      <a class="inactive">Solo Optimizer</a>
+	  <a class="inactive">Team Optimizer</a>
+    </div>
+	<div style="height:10px"></div>
+	<center><div class="button" style="width:135px;height:18px;padding:10px 50px" onclick="newLC()" id="NewLC"><p style="margin-top:0px" id="NLCText">Add new Light Cone</p>
+	  <table width=650 id="NLCTable">
+		<tr>
+			<th><div class="dropdown"><img src="../Any.png" class="dropbtn" alt="Any" width=50 height=50 style="padding:5px" id="NLCPath">
+			<div class="dropdown-content">
+			  <a onclick="nlcChangePath('Any')"><img src="../Any.png" alt="Any" width=32 height=32></a>
+			  <a onclick="nlcChangePath('Abundance')"><img src="paths/Abundance.png" alt="Abundance" width=32 height=32></a>
+			  <a onclick="nlcChangePath('Destruction')"><img src="paths/Destruction.png" alt="Destruction" width=32 height=32></a>
+			  <a onclick="nlcChangePath('Erudition')"><img src="paths/Erudition.png" alt="Erudition" width=32 height=32></a>
+			  <a onclick="nlcChangePath('Harmony')"><img src="paths/Harmony.png" alt="Harmony" width=32 height=32></a>
+			  <a onclick="nlcChangePath('Hunt')"><img src="paths/Hunt.png" alt="Hunt" width=32 height=32></a>
+			  <a onclick="nlcChangePath('Nihility')"><img src="paths/Nihility.png" alt="Nihility" width=32 height=32></a>
+			  <a onclick="nlcChangePath('Preservation')"><img src="paths/Preservation.png" alt="Preservation" width=32 height=32></a>
+			</div></div></th>
+			<th></th>
+			<th colspan=3><div class="dropdown"><input class="dropbtn" placeholder="A Secret Vow" onkeyup="loadLCData()" id="NLCinput">
+			<div class="dropdown-content" id="LCDropdown">
+			  <a onclick=""><img src="" alt="" width=50 height=50></a>
+			  <a onclick=""><img src="" alt="" width=50 height=50></a>
+			  <a onclick=""><img src="" alt="" width=50 height=50></a>
+			  <a onclick=""><img src="" alt="" width=50 height=50></a>
+			  <a onclick=""><img src="" alt="" width=50 height=50></a>
+			</div></div></th>
+		</tr><tr>
+		  <td colspan=2 rowspan=2><img src="lightcones/ASecretVow.png" alt="A Secret Vow" id="LCImage" height=325></td>
+		  <td id="Description" colspan=3></td>
+		</tr><tr id="NLCStats">
+		  <td width=100 style="text-align:center"></td>
+		  <td width=100 style="text-align:center"></td>
+		  <td width=100 style="text-align:center"></td>
+		</tr><tr>
+		  <td style="width:100px"><div class="button" style="padding:10px 50px;margin:auto">Save</div></td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td><div class="button" onclick="closeNLC()" style="padding:10px 50px">Cancel</div></td>
+		</tr>
+	  </table>
+	</div></center>
+	
+	<p>A page to optimize your builds.</p>
+	<p>Not afiliated in anyway with Hoyoverse.</p>
+	<p>Work In Progress</p>
+  </body>
+  
+  <script src="lightcones/data.js"></script>
+  <script src="LightCones.js"></script>
+</html>

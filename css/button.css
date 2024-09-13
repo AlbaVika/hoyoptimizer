@@ -1,0 +1,22 @@
+.button {
+  background-color: #FF860D;
+  color: #f2f2f2;
+  overflow: hidden;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: #FBC48D;
+  color: #000;
+}
+
+.buttonextended {
+  background-color: #FBC48D;
+  color: #000;
+  overflow: hidden;
+}
+
+.buttonextended .button:hover {
+	background-color: #D26901;
+	color: #f2f2f2;
+}

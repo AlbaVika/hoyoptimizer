@@ -2,10 +2,11 @@
 <html lang="en">
   <link rel="stylesheet" href="../css/button.css">
   <link rel="stylesheet" href="../css/dropdown.css">
+  <link rel="stylesheet" href="../css/slider.css">
   <link rel="stylesheet" href="../css/topnav.css">
   
   <title>Hoyoptimizer</title>
-  <body onload="SelectNLC('ASecretVow')">
+  <body onload="loadLCData()">
     <div class="topnav" id="Menu">
       <a href="../hoyoptimizer.html">Hoyoptimizer</a>
 	  <a class="inactive">Honkai Impact 3rd</a>
@@ -38,8 +39,10 @@
 			  <a onclick="nlcChangePath('Preservation')"><img src="paths/Preservation.png" alt="Preservation" width=32 height=32></a>
 			</div></div></th>
 			<th></th>
-			<th colspan=3><div class="dropdown"><input class="dropbtn" placeholder="A Secret Vow" onkeyup="loadLCData()" id="NLCinput">
+			<th colspan=3><div class="dropdown"><input class="dropbtn" placeholder="A Secret Vow" onkeyup="loadLCData()" style="width:300px" id="NLCinput">
 			<div class="dropdown-content" id="LCDropdown">
+			  <a onclick=""><img src="" alt="" width=50 height=50></a>
+			  <a onclick=""><img src="" alt="" width=50 height=50></a>
 			  <a onclick=""><img src="" alt="" width=50 height=50></a>
 			  <a onclick=""><img src="" alt="" width=50 height=50></a>
 			  <a onclick=""><img src="" alt="" width=50 height=50></a>
@@ -47,7 +50,15 @@
 			  <a onclick=""><img src="" alt="" width=50 height=50></a>
 			</div></div></th>
 		</tr><tr>
-		  <td colspan=2 rowspan=2><img src="lightcones/ASecretVow.png" alt="A Secret Vow" id="LCImage" height=325></td>
+		  <td style="text-align:center;"><b>Superposition</b></td>
+		  <td colspan=2><div class="topnav" style="width:225px" id="NLCSuper"><a onclick="NLCSuperposition(1)">I</a><a onclick="NLCSuperposition(2)">II</a><a onclick="NLCSuperposition(3)">III</a>
+		    <a onclick="NLCSuperposition(4)">IV</a><a onclick="NLCSuperposition(5)">V</a></div></td>
+		  <td colspan=2 style="text-align:center;"><b>Level & Ascension</b></td>
+		</tr><tr>
+		  <td colspan=2 rowspan=3><img src="lightcones/ASecretVow.png" alt="A Secret Vow" id="LCImage" height=325></td>
+		  <td id="NLCLevel"></td>
+		  <td colspan=2><input class="slider" type="range" min=1 max=86 value=86 style="width:100%" oninput="UpdateNLC()" id="NLCSlider"></td>
+		</tr><tr>
 		  <td id="Description" colspan=3></td>
 		</tr><tr id="NLCStats">
 		  <td width=100 style="text-align:center"></td>
@@ -62,6 +73,10 @@
 		</tr>
 	  </table>
 	</div></center>
+	<div style="height:10px"></div>
+	<div id="LightCones">
+	  
+	</div>
 	
 	<p>A page to optimize your builds.</p>
 	<p>Not afiliated in anyway with Hoyoverse.</p>

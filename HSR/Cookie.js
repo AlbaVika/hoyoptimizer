@@ -12,8 +12,9 @@ function getHSRCookie() {
 		}
 	}
 	if (!HSRcookie) {
-		HSRcookie = {"characters":[],"lightcones":[],"relics":[]};
+		HSRcookie = '{"characters":[],"lightcones":[],"relics":[]}';
 	}
+	HSRcookie = JSON.parse(decodeURIComponent(HSRcookie));
 	saveHSRCookie();
 }
 
@@ -21,5 +22,5 @@ function saveHSRCookie() {
 	const d = new Date();
 	d.setTime(d.getTime() + (365*24*60*60*1000));
 	let expires = "expires="+ d.toUTCString();
-	document.cookie = "HSR=" + HSRcookie + ";" + expires + ";path=/";
+	document.cookie = "HSR=" + JSON.stringify(HSRcookie) + ";" + expires + ";path=/";
 }

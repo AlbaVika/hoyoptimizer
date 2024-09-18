@@ -8,7 +8,6 @@ function getHSRCookie() {
 		}
 		if (c.indexOf('HSR=') == 0) {
 			HSRcookie = c.substring(4);
-			console.log(HSRcookie);
 			break;
 		}
 	}

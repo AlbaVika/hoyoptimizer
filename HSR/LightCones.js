@@ -1,10 +1,52 @@
-function loadLCData() {
-	document.cookie = "database={'a':2}; path=../";
-	document.cookie = "database2={'b':1}; path=/";
-	let dcookie = decodeURIComponent(document.cookie);
-	console.log(document.cookie);
+function loadLC() {
+	getHSRCookie();
+	loadLCData();
 	loadNLCData();
 	SelectNLC('ASecretVow');
+}
+
+function loadLCData() {
+	let div = document.getElementById("LightCones");
+	let s = "<tr><th width='12.5%'></th><th width='15%'></th><th></th width='6%'><th width='12.5%'></th><th width='15%'></th><th></th width='6%'><th width='12.5%'></th><th width='15%'></th><th></th width='6%'></tr><tr>";
+	for(let i = 0; i < HSRcookie.lightcones.length; i++) {
+		let lc = HSRcookie.lightcones[i];
+		if (!lcdata[lc.key]) continue;
+		let colour = lcdata[lc.key].rarity == 3 ? "#73b0f4" : lcdata[lc.key].rarity == 4 ? "#c199fd" : "#ffc870";
+		let onclick = "onclick=editLC(" + i + ")";
+		s += "<td style='background-color:" + colour + "; cursor:pointer'" + onclick + "><center><div style='position: relative; display:inline-block'><img src='lightcones/" + lc.key + ".png' width=100 height=100><div style='background-color:#333; color:#f2f2f2; position: absolute; bottom: 8px; right: 16px; padding: 7px 8px'>" +
+			getRoman(lc.superimposition) + "</div></div></center></td><td style='text-align:center; background-color:" + colour + "; cursor:pointer'" + onclick + "><h3>" + lcdata[lc.key].name +
+			"</h3></td><td style='background-color:" + colour + "; cursor:pointer'" + onclick + ">Lvl." + lc.level + (lc.level > 10 && lc.level / 10 == lc.ascension + 1 ? "+" : "") + "</td>";
+		if (i%3 == 2) s += "</tr><tr>";
+	}
+	div.innerHTML = s + "</tr>";
+}
+
+function getRoman(i) {
+	if (i==1)
+		return 'I';
+	if (i==2)
+		return 'II';
+	if (i==3)
+		return 'III';
+	if (i==4)
+		return 'IV';
+	if (i==5)
+		return 'V';
+	return "";
+}
+
+function editLC(i) {
+	let input = document.getElementById("NLCinput");
+	let delbutton = document.getElementById("delButton");
+	let lc = HSRcookie.lightcones[i];
+	newLC();
+	input.value = lcdata[lc.key].name;
+	input.disabled = true;
+	delbutton.style.display = "";
+	lci = i;
+	loadNLCData();
+	SelectNLC(lc.key);
+	NLCSuperposition(lc.superimposition);
 }
 
 var wnlc = null;
@@ -12,10 +54,17 @@ var bwidth = 135;
 var bheight = 18;
 var tmargin = 10;
 var nlca = 0;
+var lci;
 function newLC() {
-	var button = document.getElementById("NewLC");
-	var text = document.getElementById("NLCText");
-	var menu = document.getElementById("Menu");
+	let button = document.getElementById("NewLC");
+	let delbutton = document.getElementById("delButton");
+	let text = document.getElementById("NLCText");
+	let menu = document.getElementById("Menu");
+	let input = document.getElementById("NLCinput");
+	input.value = "";
+	input.disabled = false;
+	delbutton.style.display = "none";
+	lci=-1;
 	button.className = "buttonextended";
 	button.onclick = "";
 	clearInterval(wnlc);
@@ -45,9 +94,9 @@ function newLC() {
 }
 
 function closeNLC() {
-	var button = document.getElementById("NewLC");
-	var text = document.getElementById("NLCText");
-	var menu = document.getElementById("Menu");
+	let button = document.getElementById("NewLC");
+	let text = document.getElementById("NLCText");
+	let menu = document.getElementById("Menu");
 	clearInterval(wnlc);
 	wnlc = setInterval(newLCoutAnimation1,10);
 	function newLCoutAnimation1() {
@@ -76,12 +125,31 @@ function closeNLC() {
 	}
 }
 
-var path="Any";
+function deleteLC() {
+	if(lci==-1) return;
+	HSRcookie.lightcones.splice(lci,1);
+	saveHSRCookie();
+	loadLCData();
+	closeNLC();
+}
+
+function saveNLCData() {
+	if(lci==-1) {
+		HSRcookie.lightcones.push({"key":nlcname,"level":nlclevel,"ascension":nlcascension,"superimposition":nlcsuper});
+	} else {
+		HSRcookie.lightcones[lci] = {"key":nlcname,"level":nlclevel,"ascension":nlcascension,"superimposition":nlcsuper};
+	}	
+	loadLCData();
+	saveHSRCookie();
+	closeNLC()
+}
+
+var nlcpath="Any";
 function loadNLCData() {
 	var lightcones={};
 	var filter = document.getElementById("NLCinput").value.toUpperCase();
 	for(const lc in lcdata) {
-		if(path=="Any" || lcdata[lc].path==path) {
+		if(nlcpath=="Any" || lcdata[lc].path==nlcpath) {
 			if (lcdata[lc].name.toUpperCase().indexOf(filter) > -1) {
 				lightcones[lc] = lcdata[lc];
 			}
@@ -104,7 +172,7 @@ function loadNLCData() {
 
 function nlcChangePath(name) {
 	var drop = document.getElementById("NLCPath");
-	path = name;
+	nlcpath = name;
 	if (name == 'Any') {
 		drop.src = "../Any.png";
 	} else {
@@ -115,9 +183,9 @@ function nlcChangePath(name) {
 
 var nlcname;
 var nlclevel;
-var nlcsuper;
+var nlcascension;
+var nlcsuper = 1;
 function SelectNLC(name) {
-	nlcsuper = 1;
 	nlcname = name;
 	var img = document.getElementById("LCImage");
 	img.src = "lightcones/" + name + ".png";
@@ -134,13 +202,15 @@ function NLCSuperposition(superposition) {
 }
 
 function UpdateNLC() {
-	var desc = document.getElementById("Description");
-	var stats = document.getElementById("NLCStats").getElementsByTagName("td");
-	var level = document.getElementById("NLCSlider");
-	var lvltxt = document.getElementById("NLCLevel");
-	var ascension = (level.value >=20 ? Math.floor((parseInt(level.value)+1)/11) - 1 : 0);
-	var lvl = level.value - ascension;
-	var text = lcdata[nlcname].description[0];
+	let desc = document.getElementById("Description");
+	let stats = document.getElementById("NLCStats").getElementsByTagName("td");
+	let level = document.getElementById("NLCSlider");
+	let lvltxt = document.getElementById("NLCLevel");
+	let ascension = (level.value >=20 ? Math.floor((parseInt(level.value)+1)/11) - 1 : 0);
+	let lvl = level.value - ascension;
+	nlclevel = lvl;
+	nlcascension = ascension;
+	let text = lcdata[nlcname].description[0];
 	for(let i = 1; i < lcdata[nlcname].description.length; i++) {
 		text += lcdata[nlcname].ddata[i-1][nlcsuper-1] + lcdata[nlcname].description[i]
 	}

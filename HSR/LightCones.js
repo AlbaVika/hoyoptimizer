@@ -188,8 +188,10 @@ var nlcsuper = 1;
 function SelectNLC(name) {
 	nlcname = name;
 	var img = document.getElementById("LCImage");
+	var lname = document.getElementById("LCName");
 	img.src = "lightcones/" + name + ".png";
 	img.alt = lcdata[name].name;
+	lname.innerHTML = lcdata[name].name;
 	NLCSuperposition(1);
 }
 

@@ -1,3 +1,15 @@
+var wnlc = null; //Interval manager
+var bwidth = 135; //Button width
+var bheight = 18; //Button height
+var tmargin = 10; //Button top margin
+var nlcname; //LC key
+var nlclevel; //LC level
+var nlcascension; //LC ascension
+var nlcsuper = 1; //LC superimposition
+var nlcpath="Any"; //New LC path
+var lci; //Selected LC position
+
+//On page load
 function loadLC() {
 	getHSRCookie();
 	loadLCData();
@@ -5,6 +17,7 @@ function loadLC() {
 	SelectNLC('ASecretVow');
 }
 
+//Load & show saved LCs
 function loadLCData() {
 	let div = document.getElementById("LightCones");
 	let s = "<tr><th width='12.5%'></th><th width='15%'></th><th></th width='6%'><th width='12.5%'></th><th width='15%'></th><th></th width='6%'><th width='12.5%'></th><th width='15%'></th><th></th width='6%'></tr><tr>";
@@ -21,40 +34,7 @@ function loadLCData() {
 	div.innerHTML = s + "</tr>";
 }
 
-function getRoman(i) {
-	if (i==1)
-		return 'I';
-	if (i==2)
-		return 'II';
-	if (i==3)
-		return 'III';
-	if (i==4)
-		return 'IV';
-	if (i==5)
-		return 'V';
-	return "";
-}
-
-function editLC(i) {
-	let input = document.getElementById("NLCinput");
-	let delbutton = document.getElementById("delButton");
-	let lc = HSRcookie.lightcones[i];
-	newLC();
-	input.value = lcdata[lc.key].name;
-	input.disabled = true;
-	delbutton.style.display = "";
-	lci = i;
-	loadNLCData();
-	SelectNLC(lc.key);
-	NLCSuperposition(lc.superimposition);
-}
-
-var wnlc = null;
-var bwidth = 135;
-var bheight = 18;
-var tmargin = 10;
-var nlca = 0;
-var lci;
+//Load new LC for edition
 function newLC() {
 	let button = document.getElementById("NewLC");
 	let delbutton = document.getElementById("delButton");
@@ -69,6 +49,7 @@ function newLC() {
 	button.onclick = "";
 	clearInterval(wnlc);
 	wnlc = setInterval(newLCinAnimation1,10);
+	//Open button width
 	function newLCinAnimation1() {
 		bwidth += 40;
 		if(bwidth >= menu.clientWidth - 100) {
@@ -76,6 +57,7 @@ function newLC() {
 			button.style.height = "18px";
 			clearInterval(wnlc);
 			wnlc = setInterval(newLCinAnimation2,10);
+			//Open button height
 			function newLCinAnimation2() {
 				bheight += 20;
 				tmargin -= 2;
@@ -93,12 +75,29 @@ function newLC() {
 	}
 }
 
+//Load LC for edition
+function editLC(i) {
+	let input = document.getElementById("NLCinput");
+	let delbutton = document.getElementById("delButton");
+	let lc = HSRcookie.lightcones[i];
+	newLC();
+	input.value = lcdata[lc.key].name;
+	input.disabled = true;
+	delbutton.style.display = "";
+	lci = i;
+	loadNLCData();
+	SelectNLC(lc.key);
+	NLCSuperposition(lc.superimposition);
+}
+
+//Close edit button
 function closeNLC() {
 	let button = document.getElementById("NewLC");
 	let text = document.getElementById("NLCText");
 	let menu = document.getElementById("Menu");
 	clearInterval(wnlc);
 	wnlc = setInterval(newLCoutAnimation1,10);
+	//Close vertically
 	function newLCoutAnimation1() {
 		bheight -= 20;
 		tmargin += 2;
@@ -107,6 +106,7 @@ function closeNLC() {
 			text.style.marginTop = '0px';
 			clearInterval(wnlc);
 			wnlc = setInterval(newLCoutAnimation2,10);
+			//Close horizontally
 			function newLCoutAnimation2() {
 				bwidth -= 40;
 				if(bwidth <= 135) {
@@ -125,29 +125,10 @@ function closeNLC() {
 	}
 }
 
-function deleteLC() {
-	if(lci==-1) return;
-	HSRcookie.lightcones.splice(lci,1);
-	saveHSRCookie();
-	loadLCData();
-	closeNLC();
-}
-
-function saveNLCData() {
-	if(lci==-1) {
-		HSRcookie.lightcones.push({"key":nlcname,"level":nlclevel,"ascension":nlcascension,"superimposition":nlcsuper});
-	} else {
-		HSRcookie.lightcones[lci] = {"key":nlcname,"level":nlclevel,"ascension":nlcascension,"superimposition":nlcsuper};
-	}	
-	loadLCData();
-	saveHSRCookie();
-	closeNLC()
-}
-
-var nlcpath="Any";
+//Load LC selection
 function loadNLCData() {
-	var lightcones={};
-	var filter = document.getElementById("NLCinput").value.toUpperCase();
+	let lightcones={};
+	let filter = document.getElementById("NLCinput").value.toUpperCase();
 	for(const lc in lcdata) {
 		if(nlcpath=="Any" || lcdata[lc].path==nlcpath) {
 			if (lcdata[lc].name.toUpperCase().indexOf(filter) > -1) {
@@ -155,8 +136,8 @@ function loadNLCData() {
 			}
 		}
 	}
-	var i = 0;
-	var a = document.getElementById("LCDropdown").getElementsByTagName("a");
+	let i = 0;
+	let a = document.getElementById("LCDropdown").getElementsByTagName("a");
 	for(const lc in lightcones) {
 		a[i].style.display = "";
 		a[i].onclick = function(){SelectNLC(lc);};
@@ -170,6 +151,7 @@ function loadNLCData() {
 	}
 }
 
+//Change LC Path selection
 function nlcChangePath(name) {
 	var drop = document.getElementById("NLCPath");
 	nlcpath = name;
@@ -181,28 +163,27 @@ function nlcChangePath(name) {
 	loadLCData();
 }
 
-var nlcname;
-var nlclevel;
-var nlcascension;
-var nlcsuper = 1;
+//Select LC
 function SelectNLC(name) {
 	nlcname = name;
-	var img = document.getElementById("LCImage");
-	var lname = document.getElementById("LCName");
+	let img = document.getElementById("LCImage");
+	let lname = document.getElementById("LCName");
 	img.src = "lightcones/" + name + ".png";
 	img.alt = lcdata[name].name;
 	lname.innerHTML = lcdata[name].name;
 	NLCSuperposition(1);
 }
 
+//Change LC superimposition
 function NLCSuperposition(superposition) {
-	var a = document.getElementById("NLCSuper").getElementsByTagName("a");
+	let a = document.getElementById("NLCSuper").getElementsByTagName("a");
 	a[nlcsuper-1].className = "";
 	nlcsuper = superposition;
 	a[superposition-1].className = "active";
 	UpdateNLC();
 }
 
+//Update LC data
 function UpdateNLC() {
 	let desc = document.getElementById("Description");
 	let stats = document.getElementById("NLCStats").getElementsByTagName("td");
@@ -221,4 +202,40 @@ function UpdateNLC() {
 	stats[0].innerHTML = `ATK: ${Math.floor((2.16+.72*lvl+7.68*(ascension>0 ? ascension:0.25)) * lcdata[nlcname].stats[0])}`;
 	stats[1].innerHTML = `HP: ${Math.floor((1.08+.36*lvl+3.84*(ascension>0 ? ascension:0.25)) * lcdata[nlcname].stats[1])}`;
 	stats[2].innerHTML = `DEF: ${Math.floor((1.35+.45*lvl+4.8*(ascension>0 ? ascension:0.25)) * lcdata[nlcname].stats[2])}`;
+}
+
+//Deletes LC
+function deleteLC() {
+	if(lci==-1) return;
+	HSRcookie.lightcones.splice(lci,1);
+	saveHSRCookie();
+	loadLCData();
+	closeNLC();
+}
+
+//Saves editing LC
+function saveNLCData() {
+	if(lci==-1) {
+		HSRcookie.lightcones.push({"key":nlcname,"level":nlclevel,"ascension":nlcascension,"superimposition":nlcsuper});
+	} else {
+		HSRcookie.lightcones[lci] = {"key":nlcname,"level":nlclevel,"ascension":nlcascension,"superimposition":nlcsuper};
+	}	
+	loadLCData();
+	saveHSRCookie();
+	closeNLC()
+}
+
+//Util function
+function getRoman(i) {
+	if (i==1)
+		return 'I';
+	if (i==2)
+		return 'II';
+	if (i==3)
+		return 'III';
+	if (i==4)
+		return 'IV';
+	if (i==5)
+		return 'V';
+	return "";
 }

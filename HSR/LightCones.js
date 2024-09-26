@@ -14,7 +14,12 @@ function loadLC() {
 	getHSRCookie();
 	loadLCData();
 	loadNLCData();
-	SelectNLC('ASecretVow');
+	let id = null;
+	id = new URLSearchParams(window.location.search).get("id");
+	if (id == null || id < 0 || id >= HSRcookie.ligthcones.length)
+		SelectNLC('ASecretVow');
+	else
+		editLC(id);
 }
 
 //Load & show saved LCs

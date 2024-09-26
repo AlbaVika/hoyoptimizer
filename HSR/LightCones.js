@@ -93,6 +93,7 @@ function editLC(i) {
 	loadNLCData();
 	SelectNLC(lc.key);
 	NLCSuperposition(lc.superimposition);
+	document.getElementById("NewLC").scrollIntoView({behavior: 'smooth'});
 }
 
 //Close edit button

@@ -16,7 +16,7 @@ function loadLC() {
 	loadNLCData();
 	let id = null;
 	id = new URLSearchParams(window.location.search).get("id");
-	if (id == null || id < 0 || id >= HSRcookie.ligthcones.length)
+	if (id == null || id < 0 || id >= HSRcookie.lightcones.length)
 		SelectNLC('ASecretVow');
 	else
 		editLC(id);
